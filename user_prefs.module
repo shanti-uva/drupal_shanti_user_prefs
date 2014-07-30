@@ -1,0 +1,42 @@
+<?php 
+
+/**
+ * user_prefs_create_form: outputs markup for the user preference form to be inserted in the main menu
+ *    
+ */
+function user_prefs_form($form, &$form_state) {
+  $json = user_prefs_get_definition();
+  $groups = $json->langs->eng;
+  $output = '<li>
+          <a href="#">Preferences</a>
+          <h2>Preferences</h2>
+          <ul>';
+  foreach($groups as $n1 => $group) {
+    // TODO: This is only doing radio buttons. Need to implement checkboxes and select menus.
+    $output .= '<li class="drop-hdr"><em>' . $group->title . '</em></li>';
+    foreach($group->options as $n2 => $option) {
+      $groupnm = 'option' + ($n1 + 1);
+      $optn = implode('-', array($groupnm, $n2 + 1));
+      $optparts = explode(':', $option);
+      $checked = ($n2 == 0) ? " checked":"";
+      $output .= '<li class="form-group"><label class="radio-inline" for="option' . $optn . '">
+                <input type="radio" name="' . $groupnm . '" id="' . $optn . '" value="' . $optparts[0] . '" ' . $checked . '>' . 
+                  $optparts[1] . '</label></li>';
+    }
+  }
+  $output .= '</ul></li>';
+  return $output;
+}
+
+/**
+ * Function to read in JSON data defining preferences
+ */
+function user_prefs_get_definition() {
+  $path = drupal_get_path('module','user_prefs');
+  $json = file_get_contents($path . '/js/data/user_prefs_1.json');
+  return json_decode($json);
+}
+
+function user_prefs_submit_form($form, &$form_state) {
+  
+}
