@@ -6,3 +6,4 @@ package = Shanti
 files[] = user_prefs.module
 files[] = user_prefs.install
 
+scripts[] = js/user_prefs.js
